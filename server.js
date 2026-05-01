@@ -63,7 +63,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  timezone: '+00:00'
+  timezone: '+00:00',
+  ssl: process.env.DATABASE_URL || process.env.DB_HOST ? { minVersion: 'TLSv1.2' } : null
 });
 
 // ── Multer Storage ──────────────────────────────────────────────────────────
