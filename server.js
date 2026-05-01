@@ -10,9 +10,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
-
+const fs = require('fs');;
+const uuidv4 = () => require('crypto').randomUUID();
 function loadAppProperties(filepath) {
   if (!fs.existsSync(filepath)) return;
   const content = fs.readFileSync(filepath, 'utf8');
