@@ -150,6 +150,21 @@ async function recalcModuleProgress(userId, moduleId) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+//  INIT DB ROUTE
+// ════════════════════════════════════════════════════════════════════════════
+app.get('/api/init-db', async (req, res) => {
+  try {
+    const schemaPath = path.join(__dirname, 'schema.sql');
+    if (!fs.existsSync(schemaPath)) return res.status(404).json({ error: 'schema.sql not found' });
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+    await pool.query(schema);
+    res.json({ message: 'Database schema successfully initialized.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message, stack: err.stack });
+  }
+});
+
+// ════════════════════════════════════════════════════════════════════════════
 //  AUTH ROUTES
 // ════════════════════════════════════════════════════════════════════════════
 
