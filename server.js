@@ -64,8 +64,23 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   timezone: '+00:00',
+  multipleStatements: true,
   ssl: process.env.DATABASE_URL || process.env.DB_HOST ? { minVersion: 'TLSv1.2' } : null
 });
+
+// Auto-init DB
+(async function initDB() {
+  try {
+    const schemaPath = path.join(__dirname, 'schema.sql');
+    if (fs.existsSync(schemaPath)) {
+      const schema = fs.readFileSync(schemaPath, 'utf8');
+      await pool.query(schema);
+      console.log('Database schema automatically initialized/verified.');
+    }
+  } catch (err) {
+    console.error('Error initializing database:', err.message);
+  }
+})();
 
 // ── Multer Storage ──────────────────────────────────────────────────────────
 function makeStorage(subfolder) {
